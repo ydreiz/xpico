@@ -25,8 +25,18 @@ sudo apt install libx11-dev xclip clang
 ## Build
 
 ```bash
-make
+make            # debug build (default)
+make release    # optimized release build
 ```
+
+## Install
+
+```bash
+make install    # builds release and installs to ~/.local/bin
+make uninstall  # removes the binary
+```
+
+Make sure `~/.local/bin` is in your `PATH`.
 
 ## Usage
 
