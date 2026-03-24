@@ -43,6 +43,10 @@ make
 - [ ] Magnified preview window around the cursor for precise pixel selection
 - [ ] Multiple color format output: RGB, RGBA, HEX, HSL, HSV
 
+## Acknowledgements
+
+Inspired by [pico](https://github.com/sid-lakhani/pico) by sid-lakhani.
+
 ## License
 
 [MIT](LICENSE)
