@@ -1,57 +1,183 @@
 # xpico
 
-A minimal X11 screen color picker for Linux. Click anywhere on the screen and get the hex color code copied to your clipboard.
+Minimal X11 screen color picker for Linux.
+
+`xpico` grabs the pointer, lets you click any pixel on screen, prints its color
+as lowercase HEX (`#rrggbb`) and copies it to the clipboard via `xclip`.
+
+## Table of contents
+
+- [About](#about)
+- [Features](#features)
+- [Requirements](#requirements)
+- [Quick install (release binary)](#quick-install-release-binary)
+- [Build from source](#build-from-source)
+- [Run](#run)
+- [Project structure](#project-structure)
+- [Release process](#release-process)
+- [Contributing](#contributing)
+- [License](#license)
+
+## About
+
+`xpico` is a small C utility for Linux/X11 desktops.
+
+Typical flow:
+
+1. Run `xpico`
+2. Cursor changes to crosshair
+3. Click any pixel
+4. HEX color is printed to stdout and copied to clipboard
+
+This makes it useful for scripts, terminal workflows, and quick color sampling.
 
 ## Features
 
 - Crosshair cursor for precise pixel selection
-- Outputs color as a lowercase hex string (e.g. `#1a2b3c`)
-- Automatically copies the result to the system clipboard via `xclip`
-- Single-file C implementation (~100 lines)
+- Lowercase HEX output (`#rrggbb`)
+- Clipboard copy through `xclip`
+- Local build/install through `make`
+- Release-binary install via `scripts/install.sh`
 
-## Prerequisites
+## Requirements
 
-- X11-based desktop (does not work natively on Wayland)
-- `libx11-dev` (build time)
-- `xclip` (runtime)
-- `clang` or `gcc`
+### Runtime
 
-On Debian/Ubuntu:
+- Linux with X11
+- `xclip` (required for clipboard copy)
 
-```bash
-sudo apt install libx11-dev xclip clang
-```
+### Build from source
 
-## Build
+- GCC and `make`
+- X11 development package (`libX11` headers/libs)
 
-```bash
-make            # debug build (default)
-make release    # optimized release build
-```
+### Dependencies by distro
 
-## Install
+#### Debian/Ubuntu
 
 ```bash
-make install    # builds release and installs to ~/.local/bin
-make uninstall  # removes the binary
+sudo apt update
+sudo apt install build-essential libx11-dev xclip
 ```
 
-Make sure `~/.local/bin` is in your `PATH`.
+#### Fedora
 
-## Usage
+```bash
+sudo dnf install gcc make libX11-devel xclip
+```
+
+#### Arch Linux
+
+```bash
+sudo pacman -S base-devel libx11 xclip
+```
+
+## Quick install (release binary)
+
+Install latest release to `~/.local/bin/xpico`:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ydreiz/xpico/refs/heads/main/scripts/install.sh | bash
+```
+
+Install a specific version:
+
+```bash
+TAG=v1.0.0 curl -fsSL https://raw.githubusercontent.com/ydreiz/xpico/refs/heads/main/scripts/install.sh | bash
+```
+
+Uninstall:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ydreiz/xpico/refs/heads/main/scripts/uninstall.sh | bash
+```
+
+Supported release architectures: `x86_64`, `arm64`.
+
+## Build from source
+
+### Debug build (default)
+
+```bash
+make
+```
+
+Builds `xpico` with debug flags.
+
+### Release build
+
+```bash
+make release
+```
+
+Builds optimized binary and strips symbols.
+
+### Local install/uninstall
+
+By default, install target is `~/.local/bin`.
+
+```bash
+make install
+make uninstall
+```
+
+### Clean
+
+```bash
+make clean
+```
+
+## Run
+
+From repository root:
 
 ```bash
 ./xpico
 ```
 
-1. The cursor changes to a crosshair.
-2. Click on any pixel on the screen.
-3. The hex color code is printed to stdout and copied to your clipboard.
+If installed and `~/.local/bin` is in `PATH`:
 
-## Roadmap
+```bash
+xpico
+```
 
-- [ ] Magnified preview window around the cursor for precise pixel selection
-- [ ] Multiple color format output: RGB, RGBA, HEX, HSL, HSV
+Example output:
+
+```text
+#1a2b3c
+```
+
+## Project structure
+
+```text
+.
+├── main.c
+├── Makefile
+├── scripts/
+│   ├── install.sh
+│   └── uninstall.sh
+└── .github/workflows/
+    └── build-and-release.yml
+```
+
+## Release process
+
+Pushing a tag matching `v*` triggers GitHub Actions to:
+
+1. Build release binaries for `x86_64` and `arm64`
+2. Pack each binary to `xpico-<arch>.tar.gz`
+3. Publish assets in a GitHub Release
+
+Workflow file: `.github/workflows/build-and-release.yml`.
+
+## Contributing
+
+This repository is a small C utility project; improvements are welcome.
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit changes
+4. Open a pull request
 
 ## Acknowledgements
 
@@ -59,4 +185,4 @@ Inspired by [pico](https://github.com/sid-lakhani/pico) by sid-lakhani.
 
 ## License
 
-[MIT](LICENSE)
+This project is licensed under the MIT License. See `LICENSE` for details.
